@@ -5,7 +5,6 @@ import {CreateStudentDto} from './dto/create-student.dto'
 import {UpdateStudentDto} from './dto/update-student.dto'
 
 @Controller('students')
-@UseGuards(JwtAuthGuard)
 export class StudentController {
 	constructor(private readonly StudentService: StudentService) {}
 

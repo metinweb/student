@@ -4,6 +4,7 @@ import {CreateAdminDto} from './dto/create-admin.dto'
 import {JwtAuthGuard} from '../auth/guards/jwt-auth.guard'
 import {AuthService} from '../auth/auth.service'
 import {LoginDto} from './dto/login.dto'
+import {PublicRoute} from '../shared/decorators/public-route.decorator'
 
 @Controller('admin')
 export class AdminController {
@@ -14,11 +15,13 @@ export class AdminController {
 		private authService: AuthService
 	) {}
 
+	@PublicRoute()
 	@Post('register')
 	async create(@Body() createAdminDto: CreateAdminDto) {
 		return this.adminService.create(createAdminDto)
 	}
 
+	@PublicRoute()
 	@Post('login')
 	async login(@Body() loginDto: LoginDto) {
 		const admin = await this.authService.validateAdmin(loginDto.username, loginDto.password)
@@ -28,13 +31,11 @@ export class AdminController {
 		return this.authService.login(admin)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Get('status')
 	getStatus(@Request() req) {
 		return this.adminService.getStatus(req.user.userId)
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Get('profile')
 	getProfile(@Request() req) {
 		return this.adminService.getProfile(req.user.userId)
